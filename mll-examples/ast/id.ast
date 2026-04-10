@@ -1,0 +1,5 @@
+(PROG (LET (FUN ("id" 21) ":" ("FORALL" (("t0" 0)) (TyFun (TyVar ("t0" 0)) (TyVar ("t0" 0)))) (P_VAR ("x" 22))
+                (VAR ("x" 22)))
+           (LET (VAL (P_VAR ("n" 23)) (APPLY (APPLY (APPLY (VAR ("id" 21)) (VAR ("id" 21))) (VAR ("id" 21))) (INT 42)))
+                (COND (APPLY (VAR ("==" 1)) (TUPLE (VAR ("n" 23)) (INT 42))) (APPLY (VAR ("print" 18)) (STR "Ok\n"))
+                      (APPLY (VAR ("print" 18)) (STR "Fail\n"))))))

@@ -1,0 +1,1 @@
+(PROG (LET (VAL (P_VAR ("_" 21)) (APPLY (VAR ("+" 6)) (TUPLE (INT 1) (INT 1)))) (TUPLE)))

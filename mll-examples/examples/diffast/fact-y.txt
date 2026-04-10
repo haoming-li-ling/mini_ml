@@ -1,0 +1,4 @@
+37c37
+<                      (LET (FUN ("g" 26) ":" (TyFun (TyMeta 5) (TyMeta 3)) (P_VAR ("x" 27))
+---
+>                      (LET (FUN ("g" 26) ":" (TyFun (TyMeta 9) (TyMeta 10)) (P_VAR ("x" 27))

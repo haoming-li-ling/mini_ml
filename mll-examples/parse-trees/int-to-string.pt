@@ -1,0 +1,27 @@
+(Prog (BindFun intToString ((PatVar i))
+               (ExpIf (ExpBin (ExpVar i) < (ExpInt 0))
+                      (ExpBin (ExpStr "-") ^ (ExpApp (ExpVar intToString) (ExpUn unary - (ExpVar i))))
+                      (ExpIf (ExpBin (ExpVar i) == (ExpInt 0)) (ExpStr "0")
+                             (ExpIf (ExpBin (ExpVar i) == (ExpInt 1)) (ExpStr "1")
+                                    (ExpIf (ExpBin (ExpVar i) == (ExpInt 2)) (ExpStr "2")
+                                           (ExpIf (ExpBin (ExpVar i) == (ExpInt 3)) (ExpStr "3")
+                                                  (ExpIf (ExpBin (ExpVar i) == (ExpInt 4)) (ExpStr "4")
+                                                         (ExpIf (ExpBin (ExpVar i) == (ExpInt 5)) (ExpStr "5")
+                                                                (ExpIf (ExpBin (ExpVar i) == (ExpInt 6)) (ExpStr "6")
+                                                                       (ExpIf (ExpBin (ExpVar i) == (ExpInt 7))
+                                                                              (ExpStr "7")
+                                                                              (ExpIf (ExpBin (ExpVar i) == (ExpInt 8))
+                                                                                     (ExpStr "8")
+                                                                                     (ExpIf (ExpBin (ExpVar i) ==
+                                                                                                    (ExpInt 9))
+                                                                                            (ExpStr "9")
+                                                                                            (ExpBin (ExpApp (ExpVar intToString)
+                                                                                                            (ExpBin (ExpVar i)
+                                                                                                                    /
+                                                                                                                    (ExpInt 10)))
+                                                                                                    ^
+                                                                                                    (ExpApp (ExpVar intToString)
+                                                                                                            (ExpBin (ExpVar i)
+                                                                                                                    %
+                                                                                                                    (ExpInt 10))))))))))))))))
+      (ExpApp (ExpVar print) (ExpBin (ExpApp (ExpVar intToString) (ExpInt 42)) ^ (ExpStr "\n"))))

@@ -1,0 +1,1 @@
+(PROG (("arguments" 0)) (E_LET (("_t0000" 1) (R_CALL "_mll_print" (V_STR "hello world\n"))) (E_RET (V_INT 0))))

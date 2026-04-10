@@ -1,0 +1,23 @@
+(PROG (("arguments" 0))
+      (E_LET (("_t0000" 1) (E_FUN (("fib" 2) (("n" 3))
+                                             (E_COND ("IntLte" (V_VAR "n" 3) (V_INT 1)) (E_RET (V_INT 1))
+                                                     (E_LET (("_t0001" 4) (E_LET (("_t0002" 5) (R_PRIM "IntSub"
+                                                                                                       (V_VAR "n" 3)
+                                                                                                       (V_INT 1)))
+                                                                                 (E_APPLY ("fib" 2) (V_VAR "_t0002" 5))))
+                                                            (E_LET (("_t0003" 6) (E_LET (("_t0004" 7) (R_PRIM "IntSub"
+                                                                                                              (V_VAR "n"
+                                                                                                                     3)
+                                                                                                              (V_INT 2)))
+                                                                                        (E_APPLY ("fib" 2)
+                                                                                                 (V_VAR "_t0004" 7))))
+                                                                   (E_LET (("_t0005" 8) (R_PRIM "IntAdd"
+                                                                                                (V_VAR "_t0001" 4)
+                                                                                                (V_VAR "_t0003" 6)))
+                                                                          (E_RET (V_VAR "_t0005" 8)))))))
+                                  (E_LET (("_t0006" 9) (E_APPLY ("fib" 2) (V_INT 5)))
+                                         (E_COND ("IntEq" (V_VAR "_t0006" 9) (V_INT 8))
+                                                 (E_LET (("_t0007" 10) (R_CALL "_mll_print" (V_STR "Ok\n")))
+                                                        (E_RET (V_VAR "_t0007" 10)))
+                                                 (E_LET (("_t0008" 11) (R_CALL "_mll_print" (V_STR "Fail\n")))
+                                                        (E_RET (V_VAR "_t0008" 11))))))) (E_RET (V_INT 0))))

@@ -1,0 +1,4 @@
+37c37
+<                      (LET (FUN ("g" 25) ":" ("FORALL" (("t0" 2)) (TyFun (TyVar ("t0" 2)) (TyMeta 4))) (P_VAR ("z" 26))
+---
+>                      (LET (FUN ("g" 25) ":" ("FORALL" (("t0" 2)) (TyFun (TyVar ("t0" 2)) (TyMeta 6))) (P_VAR ("z" 26))

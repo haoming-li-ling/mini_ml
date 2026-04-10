@@ -1,0 +1,1 @@
+(PROG (APPLY (VAR ("print" 18)) (STR "hello world\n")))

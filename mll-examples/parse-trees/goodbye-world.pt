@@ -1,0 +1,17 @@
+(Prog (BindVal (PatVar hello) (ExpStr "Hello")) (BindVal (PatVar goodbye) (ExpStr "Goodbye"))
+      (BindVal (PatVar world) (ExpStr "world"))
+      (BindVal PatWild
+               (ExpApp (ExpVar print)
+                       (ExpBin (ExpBin (ExpBin (ExpVar hello) ^ (ExpStr ", ")) ^ (ExpVar world)) ^ (ExpStr "!\n"))))
+      (BindFun f ((PatVar n))
+               (SCOPE ((BindFun loop ((PatVar i))
+                                (ExpIf (ExpBin (ExpVar i) < (ExpVar n))
+                                       (SCOPE ((BindExp (ExpApp (ExpVar print) (ExpStr " cruel"))))
+                                              (ExpApp (ExpVar loop) (ExpBin (ExpVar i) + (ExpInt 1)))) (ExpTuple))) (BindExp (ExpApp (ExpVar print)
+                                                                                                                       (ExpBin (ExpVar goodbye)
+                                                                                                                       ^
+                                                                                                                       (ExpStr ","))))
+                                                                                                                    (BindExp (ExpApp (ExpVar loop)
+                                                                                                                       (ExpInt 0))))
+                      (ExpApp (ExpVar print) (ExpBin (ExpBin (ExpStr " ") ^ (ExpVar world)) ^ (ExpStr "!\n")))))
+      (ExpApp (ExpVar f) (ExpInt 5)))

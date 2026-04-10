@@ -1,0 +1,6 @@
+(Prog (BindFun fib ((PatVar n))
+               (ExpIf (ExpBin (ExpVar n) <= (ExpInt 1)) (ExpInt 1)
+                      (ExpBin (ExpApp (ExpVar fib) (ExpBin (ExpVar n) - (ExpInt 1))) +
+                              (ExpApp (ExpVar fib) (ExpBin (ExpVar n) - (ExpInt 2))))))
+      (ExpIf (ExpBin (ExpApp (ExpVar fib) (ExpInt 5)) == (ExpInt 8)) (ExpApp (ExpVar print) (ExpStr "Ok\n"))
+             (ExpApp (ExpVar print) (ExpStr "Fail\n"))))

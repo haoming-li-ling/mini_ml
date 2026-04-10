@@ -1,0 +1,1 @@
+(Prog (BindVal PatWild (ExpBin (ExpInt 42) / (ExpInt 0))) (ExpTuple))

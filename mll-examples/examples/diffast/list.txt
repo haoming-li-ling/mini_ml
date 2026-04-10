@@ -1,0 +1,6 @@
+65,66c65,66
+<                                          (TyFun (TyTuple (TyCon ("Int" 1) ()) (TyCon ("List" 2) ((TyMeta 32))))
+<                                                 (TyCon ("List" 2) ((TyMeta 32))))
+---
+>                                          (TyFun (TyTuple (TyCon ("Int" 1) ()) (TyCon ("List" 2) ((TyMeta 33))))
+>                                                 (TyCon ("List" 2) ((TyMeta 33))))

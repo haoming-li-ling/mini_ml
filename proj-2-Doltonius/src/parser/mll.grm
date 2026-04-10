@@ -1,0 +1,400 @@
+(* mll.grm
+ *
+ * COPYRIGHT (c) 2021 John Reppy (http://cs.uchicago.edu/~jhr)
+ * All rights reserved.
+ *
+ * Sample code
+ * CMSC 22600
+ * Autumn 2021
+ * University of Chicago
+ *
+ * ML-Antlr specification for ML Lite.
+ *)
+
+%name MLL;
+
+%defs (
+  structure PT = ParseTree
+  structure Op = OpNames
+
+  type pos = Error.pos
+
+  (* fun deMark (PT.ProgMark {span = _, tree = PT.Prog (dclist, e)}) = {dc = dclist, ex = e} *)
+
+
+  (* YOUR CODE HERE *)
+);
+
+(* MLL tokens *)
+%tokens
+    : KW_case           ("case")
+    | KW_data           ("data")
+    | KW_else           ("else")
+    | KW_end            ("end")
+    | KW_fun            ("fun")
+    | KW_if             ("if")
+    | KW_let            ("let")
+    | KW_of             ("of")
+    | KW_then           ("then")
+    | LP                ("(")
+    | RP                (")")
+    | LB                ("[")
+    | RB                ("]")
+    | LCB               ("{")
+    | RCB               ("}")
+    | ASSIGN            (":=")
+    | ORELSE            ("||")
+    | ANDALSO           ("&&")
+    | EQEQ              ("==")
+    | NEQ               ("!=")
+    | LTEQ              ("<=")
+    | LT                ("<")
+    | CONS              ("::")
+    | CONCAT            ("^")
+    | PLUS              ("+")
+    | MINUS             ("-")
+    | TIMES             ("*")
+    | DIV               ("/")
+    | MOD               ("%")
+    | DEREF             ("!")
+    | EQ                ("=")
+    | COMMA             (",")
+    | SEMI              (";")
+    | BAR               ("|")
+    | ARROW             ("->")
+    | DARROW            ("=>")
+    | WILD              ("_")
+    | UID of Atom.atom
+    | LID of Atom.atom
+    | NUMBER of IntInf.int
+    | STRING of string
+    ;
+
+%start Program;
+
+(* REPLACE WITH YOUR GRAMMAR *)
+Program
+        : Exp (";" Program => (Program))?  => (
+            case SR 
+              of SOME (PT.ProgMark {span = _, tree = PT.Prog (declist, e)}) => 
+                PT.ProgMark {
+                  span = FULL_SPAN,
+                  tree = PT.Prog (
+                    PT.DclMark {
+                      span = Exp_SPAN,
+                      tree = PT.DclVal (
+                        PT.BindMark {
+                          span = Exp_SPAN,
+                          tree = PT.BindExp Exp
+                        }
+                      )
+                    } :: declist, 
+                    e
+                  )
+                }
+               | _ => PT.ProgMark {
+                          span = FULL_SPAN, 
+                          tree = PT.Prog ([], Exp)
+                      }
+          ) 
+        | ( Ddata
+          | DV1) ";" Program => (PT.ProgMark {
+                  span = FULL_SPAN,
+                  tree = (
+                    case Program 
+                      of PT.ProgMark {span = _, tree = PT.Prog (dclist, e)} => 
+                        PT.Prog (SR :: dclist, e)
+                       | _ => raise Fail "wrong syntax"
+                  )
+          })
+        |        => (PT.Prog([], PT.ExpInt 0))
+        ;
+
+Ddata 
+        : "data" UID TyParams? EQ ConDcl ("|" ConDcl => (ConDcl))* => (
+            PT.DclMark {
+              span = FULL_SPAN,
+              tree = PT.DclData (UID, 
+                                 (case TyParams of SOME l => l | NONE => []),
+                                 ConDcl :: SR)
+            }
+          )
+        ;
+
+        
+(* DExp 
+        : VExp => (PT.DclMark {span = FULL_SPAN, tree = PT.DclVal VExp})
+        ;
+
+VExp 
+        : Exp => (PT.BindMark {span = FULL_SPAN, tree = PT.BindExp Exp})
+        ; *)
+
+DV1 
+        : V1 => (PT.DclMark {span = FULL_SPAN, tree = PT.DclVal V1})
+        ;
+
+(* TopDcl
+        : "data" UID (TyParams)? "=" ConDcl ("|" ConDcl)*
+        | ValBind
+        ; *)
+
+TyParams
+        : "[" LID ("," LID)* "]" => (LID :: SR)
+        ;
+
+ConDcl
+        : UID ("of" Type => (Type))? => (PT.ConMark {
+          span = FULL_SPAN,
+          tree = PT.Con (UID, SR)
+        })
+        ;
+
+Type 
+        : Type1
+        ;
+
+Type1 
+        : Type2 (("->" Type2 => (Type2))+ => (SR))? => (
+            case SR 
+              of SOME SR' => (
+                PT.TyMark { 
+                  span = FULL_SPAN,
+                  tree = List.foldr 
+                    (fn (t1, t2) => PT.TyFun (t1, t2)) 
+                    (List.last (Type2 :: SR')) 
+                    (List.take (Type2 :: SR', (List.length (Type2 :: SR')) - 1))
+                })
+               | NONE => Type2
+          )
+        ;
+
+Type2
+        : AtomicType (("*" AtomicType => (AtomicType))+ => (SR))? => (
+            case SR 
+              of SOME SR' => (
+                PT.TyMark {
+                  span = FULL_SPAN,
+                  tree = PT.TyTuple (AtomicType :: SR')
+                })
+               | NONE => AtomicType
+          )
+        ;
+
+
+AtomicType
+        : UID TyArgs? => (PT.TyMark {
+            span = FULL_SPAN, 
+            tree = PT.TyCon (UID, (case TyArgs of SOME tl => tl
+                                                | NONE => []))
+          })
+        | LID => (PT.TyMark {span = FULL_SPAN, tree = PT.TyVar LID})
+        | "(" Type ")" => (Type)
+        ;
+
+TyArgs
+        : "[" Type ("," Type => (Type))* "]" => (Type :: SR)
+        ;
+
+
+(* ValBind 
+        : V1
+        | Exp
+        ; *)
+
+V1
+        : "let" AtomicPat "=" Exp => (PT.BindMark {
+            span = FULL_SPAN, 
+            tree = PT.BindVal (AtomicPat, Exp)
+          })
+        | "fun" LID AtomicPat+ "=" Exp => (PT.BindMark {
+          span = FULL_SPAN,
+          tree = PT.BindFun (LID, AtomicPat, Exp) 
+        })
+        ;
+
+Pat 
+        : UID SimplePat? => (PT.PatMark {
+          span = FULL_SPAN,
+          tree = PT.PatCon (UID, SimplePat)
+        })
+        | SimplePat "::" SimplePat => (PT.PatMark {
+          span = FULL_SPAN,
+          tree = PT.PatListCons (SimplePat1, SimplePat2)
+        })
+        | AtomicPat
+        ;
+
+AtomicPat
+        : "(" SimplePat ("," SimplePat => (SimplePat))+ ")" => (PT.PatMark {
+          span = FULL_SPAN,
+          tree = PT.PatTuple (SimplePat :: SR)
+        }) 
+        | "(" SimplePat ")" => (SimplePat)
+        | SimplePat 
+        ;
+
+SimplePat
+        : LID => (PT.PatMark {span = FULL_SPAN, tree = PT.PatVar LID})
+        | "_" => (PT.PatMark {span = FULL_SPAN, tree = PT.PatWild})
+        ;
+
+Exp
+        : Exp1
+        ;
+
+Exp1
+        : "if" Exp2 "then" Exp2 "else" Exp2 => (PT.ExpMark {
+          span = FULL_SPAN, 
+          tree = PT.ExpIf (Exp21, Exp22, Exp23)
+        })
+        | OpExp (":=" OpExp => (OpExp))? => 
+          (case SR of
+            SOME OE => (PT.ExpMark {
+              span = FULL_SPAN, 
+              tree = PT.ExpBin (OpExp, Atom.atom ":=", OE)
+            })
+          | NONE => OpExp
+        )
+        ;
+
+Exp2
+        : Exp1
+        ;
+
+OpExp 
+        : OE1 ("||" OE1 => (OE1))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn (e, t) => PT.ExpOrElse (t, e))
+            OE1
+            SR
+        })
+        ;
+
+OE1
+        : OE2 ("&&" OE2 => (OE2))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn (e, t) => PT.ExpAndAlso (t, e))
+            OE2
+            SR
+        })
+        ;
+
+OE2
+        : OE3 ("==" OE3 => ((OE3, "=="))
+              |"!=" OE3 => ((OE3, "!="))
+              |"<" OE3 => ((OE3, "<"))
+              |"<=" OE3 => ((OE3, "<=")))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn ((e, op'), t) => PT.ExpBin (t, Atom.atom op', e))
+            OE3
+            SR
+        })
+        ;
+
+OE3
+        : OE5 ("::" OE5 => (OE5))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldr 
+            (fn (e, t) => PT.ExpListCons (e, t))
+            (List.last (OE5 :: SR))
+            (List.take (OE5 :: SR, List.length (OE5 :: SR) - 1)) 
+        })
+        ;
+
+OE5 
+        : OE6 ("+" OE6 => ((OE6, "+"))
+              |"-" OE6 => ((OE6, "-"))
+              |"^" OE6 => ((OE6, "^")))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn ((e, op'), t) => PT.ExpBin (t, Atom.atom op', e))
+            OE6
+            SR
+        })
+        ;
+
+OE6
+        : OE7 ("*" OE7 => ((OE7, "*"))
+              |"/" OE7 => ((OE7, "/"))
+              |"%" OE7 => ((OE7, "%")))* => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn ((e, op'), t) => PT.ExpBin (t, Atom.atom op', e))
+            OE7
+            SR
+        })
+        ;
+
+OE7
+        : "-" AppExp => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpUn (Atom.atom "unary -", AppExp)})
+        | "!" AppExp => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpUn (Atom.atom "!", AppExp)})
+        | AppExp 
+        ;
+
+AppExp
+        : AtomicExp+ => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = List.foldl 
+            (fn (e1, e2) => PT.ExpApp (e2, e1))
+            (List.hd AtomicExp)
+            (List.tl AtomicExp) 
+        })
+        ;
+
+AtomicExp
+        : LID => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpVar LID})
+        | UID => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpCon UID})
+        | NUMBER => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpInt NUMBER})
+        | STRING => (PT.ExpMark {span = FULL_SPAN, tree = PT.ExpStr STRING})
+        | "(" (Exp ("," Exp => (Exp))* => ((Exp, SR)))? ")" => (
+            case SR 
+              of SOME (Exp, []) => Exp
+               | SOME (Exp, hd :: tl) => PT.ExpMark {
+                   span = FULL_SPAN,
+                   tree = PT.ExpTuple (Exp :: hd :: tl)
+                 }
+               | NONE => PT.ExpMark {span = FULL_SPAN, tree = PT.ExpTuple []}
+          )
+        | "{" Scope "}" => (Scope)
+        | "case" Exp "of" MatchCase+ "end" => (PT.ExpMark {
+            span = FULL_SPAN,
+            tree = PT.ExpCase (Exp, MatchCase)
+          })
+        ;
+
+
+Scope
+        : Scope1
+        ;
+
+
+Scope1 
+        : V1 ";" Scope1 => (PT.ExpMark {
+          span = FULL_SPAN,
+          tree = (case Scope1 of PT.ExpMark {span = _, tree = PT.ExpScope (bl, e)} => PT.ExpScope (V1 :: bl, e) | _ => raise Fail "wrong syntax")
+        })
+        | Exp (";" Scope1 => (Scope1))? => (PT.ExpMark {
+          span = FULL_SPAN, 
+          tree = (case SR 
+                    of SOME (PT.ExpMark {span = _, tree = PT.ExpScope (bl, e)})
+                        => PT.ExpScope (
+                            PT.BindMark {
+                              span = Exp_SPAN, 
+                              tree = PT.BindExp Exp
+                            } :: bl,
+                            e) 
+                     | _ => PT.ExpScope ([], Exp))
+        }) 
+        ;
+
+
+MatchCase
+        : "{" Pat "=>" Scope "}" => (PT.RuleMark {
+          span = FULL_SPAN,
+          tree = (PT.RuleCase (Pat, (case Scope of PT.ExpMark {span = _, tree = PT.ExpScope sc} => sc | _ => raise Fail "wrong syntax")))
+        })
+        ;

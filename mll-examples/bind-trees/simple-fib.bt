@@ -1,0 +1,6 @@
+(Prog (BindFun ("fib" 19) ((PatVar ("n" 20)))
+               (ExpIf (ExpBin (ExpVar ("n" 20)) ("<=" 3) (ExpInt 1)) (ExpInt 1)
+                      (ExpBin (ExpApp (ExpVar ("fib" 19)) (ExpBin (ExpVar ("n" 20)) ("-" 7) (ExpInt 1))) ("+" 6)
+                              (ExpApp (ExpVar ("fib" 19)) (ExpBin (ExpVar ("n" 20)) ("-" 7) (ExpInt 2))))))
+      (ExpIf (ExpBin (ExpApp (ExpVar ("fib" 19)) (ExpInt 5)) ("==" 1) (ExpInt 8))
+             (ExpApp (ExpVar ("print" 16)) (ExpStr "Ok\n")) (ExpApp (ExpVar ("print" 16)) (ExpStr "Fail\n"))))

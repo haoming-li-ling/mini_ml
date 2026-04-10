@@ -1,0 +1,5 @@
+(Prog (BindFun ("id" 19) ((PatVar ("x" 20))) (ExpVar ("x" 20)))
+      (BindVal (PatVar ("n" 21))
+               (ExpApp (ExpApp (ExpApp (ExpVar ("id" 19)) (ExpVar ("id" 19))) (ExpVar ("id" 19))) (ExpInt 42)))
+      (ExpIf (ExpBin (ExpVar ("n" 21)) ("==" 1) (ExpInt 42)) (ExpApp (ExpVar ("print" 16)) (ExpStr "Ok\n"))
+             (ExpApp (ExpVar ("print" 16)) (ExpStr "Fail\n"))))

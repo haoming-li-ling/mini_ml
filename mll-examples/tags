@@ -1,0 +1,50 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/Users/haomingli/cmsc226/mll-examples/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/385c6b89/
+Args	examples/args.ml	/^\/* args.ml *\/$/;"	M
+Args2	examples/args2.ml	/^\/* args.ml *\/$/;"	M
+Divide-by-zero	examples/divide-by-zero.ml	/^\/\/ divide-by-zero.ml$/;"	M
+Even-odd	examples/even-odd.ml	/^\/* even-odd.ml *\/$/;"	M
+Fact-y	examples/fact-y.ml	/^\/* fact-y.ml *\/$/;"	M
+Fib	examples/fib.ml	/^\/* fib.ml *\/$/;"	M
+Fib-y	examples/fib-y.ml	/^\/* fib-y.ml *\/$/;"	M
+Goodbye-world	examples/goodbye-world.ml	/^\/* goodbye-world.ml *\/$/;"	M
+Hello-world	examples/hello-world.ml	/^\/* hello-world.ml *\/$/;"	M
+Id	examples/id.ml	/^\/* id.ml *\/$/;"	M
+Int-to-string	examples/int-to-string.ml	/^\/* int-to-string.ml *\/$/;"	M
+List	examples/list.ml	/^\/* list.ml *\/$/;"	M
+List2	examples/list2.ml	/^\/* list.ml *\/$/;"	M
+ML Lite Example Programs	README.md	/^# ML Lite Example Programs$/;"	c
+Okay	examples/okay.ml	/^\/\/ the most trivial ML Lite program$/;"	M
+One-plus-one	examples/one-plus-one.ml	/^\/* one-plus-one.ml *\/$/;"	M
+One-plus-one2	examples/one-plus-one2.ml	/^\/* one-plus-one.ml *\/$/;"	M
+Simple-fact	examples/simple-fact.ml	/^\/* simple-fact.ml *\/$/;"	M
+Simple-fib	examples/simple-fib.ml	/^\/* fib.ml *\/$/;"	M
+String-to-int	examples/string-to-int.ml	/^\/* string-to-int.ml *\/$/;"	M
+String-to-int2	examples/string-to-int2.ml	/^\/* string-to-int.ml *\/$/;"	M
+_	examples/divide-by-zero.ml	/^let _ = 42 \/ 0;$/;"	f
+_	examples/one-plus-one.ml	/^let _ = 1 + 1; ()$/;"	f
+a	examples/fact-y.ml	/^\/* the Y combinator; has type ((a -> b) -> a -> b) -> a -> b *\/$/;"	t
+args	examples/args2.ml	/^let args = arguments;$/;"	v
+fact	examples/fact-y.ml	/^let fact = y factY;$/;"	v
+fib	examples/fib-y.ml	/^let fib = y fibY ();$/;"	v
+hello	examples/goodbye-world.ml	/^let hello = "Hello";$/;"	v
+i	examples/args.ml	/^            { x :: xs => let i = fst arg; f (i, x); appf (i+1, xs) }$/;"	v
+i	examples/args2.ml	/^            { x :: xs => let i = fst arg; f (i, x); appf (i+1, xs) }$/;"	v
+n	examples/fib.ml	/^let n = 20;$/;"	v
+n	examples/id.ml	/^let n = id id id 42;$/;"	v
+n	examples/list.ml	/^let n = 4999;$/;"	v
+n	examples/list2.ml	/^let n = 4999;$/;"	v
+nArgs	examples/args.ml	/^let nArgs = length arguments;$/;"	v
+ord0	examples/string-to-int.ml	/^let ord0 = sub ("0", 0);$/;"	v
+ord0	examples/string-to-int2.ml	/^let ord0 = sub ("0", 0);$/;"	v
+zero	examples/even-odd.ml	/^let zero = 0;$/;"	v
+zero	examples/simple-fact.ml	/^let zero = 0;$/;"	v

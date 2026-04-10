@@ -1,0 +1,7 @@
+(PROG (LET (FUN ("fib" 21) ":" (TyFun (TyCon ("Int" 1) ()) (TyCon ("Int" 1) ())) (P_VAR ("n" 22))
+                (COND (APPLY (VAR ("<=" 3)) (TUPLE (VAR ("n" 22)) (INT 1))) (INT 1)
+                      (APPLY (VAR ("+" 6))
+                             (TUPLE (APPLY (VAR ("fib" 21)) (APPLY (VAR ("-" 7)) (TUPLE (VAR ("n" 22)) (INT 1))))
+                                    (APPLY (VAR ("fib" 21)) (APPLY (VAR ("-" 7)) (TUPLE (VAR ("n" 22)) (INT 2))))))))
+           (COND (APPLY (VAR ("==" 1)) (TUPLE (APPLY (VAR ("fib" 21)) (INT 5)) (INT 8)))
+                 (APPLY (VAR ("print" 18)) (STR "Ok\n")) (APPLY (VAR ("print" 18)) (STR "Fail\n")))))
