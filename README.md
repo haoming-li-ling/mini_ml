@@ -3,8 +3,8 @@ Fragments of a compiler for a toy ML family language written in Standard ML for 
 # Navigating the repo
 
 - The four projects correspond to four incremental stages of developing the compiler:
-    1. Tokenizing and parsing
+    1. Lexing and parsing
     2. Variable-binding
     3. Type-checking
-    4. LLVM code emission
+    4. LLVM code emissionn and optimizations (optimizations incomplete)
 - Building the projects requires SML/NJ installed in `PATH`
